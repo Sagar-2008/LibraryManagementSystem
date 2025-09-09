@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Library Management System — Single File (HTML+CSS+JS)</title>
+    <style>
+        :root {
+            --bg: #0f172a;
+            /* slate-900 */
+            --card: #111827cc;
+            /* gray-900 with alpha */
+            --muted: #94a3b8;
+            /* slate-400 */
+            --text: #e5e7eb;
+            /* gray-200 */
+            --accent: #22c55e;
+            /* green-500 */
+            --accent-2: #3b82f6;
+            /* blue-500 */
+            --danger: #ef4444;
+            /* red-500 */
+            --warn: #f59e0b;
+            /* amber-500 */
+            --shadow: 0 10px 30px rgba(0, 0, 0, .35);
+            --radius: 18px;
+        }
+
+        * {
+            box-sizing: border-box
+        }
+
+        html,
+        body {
+            height: 100%
+        }
+
+        body {
+            margin: 0;
+            font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+            background: radial-gradient(1200px 600px at 10% -10%, #1f293780 10%, transparent 60%),
+                radial-gradient(1000px 500px at 110% 20%, #0ea5e980 10%, transparent 70%),
+                var(--bg);
+            color: var(--text);
+            line-height: 1.4;
+        }
+
+        header {
+            padding: 24px 20px 10px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 16px;
+            justify-content: space-between;
+        }
+
+        .brand {
+            font-size: clamp(22px, 2.2vw, 28px);
+            font-weight: 800;
+            letter-spacing: .3px;
+        }
+
+        .sub {
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .container {
+            padding: 12px 20px 28px;
+            max-width: 1100px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+        }
+
+        @media (min-width: 980px) {
+            .container {
+                grid-template-columns: 360px 1fr;
+                align-items: start;
+            }
+        }
+
+        .card {
+            background: linear-gradient(180deg, #0b1221d9, #0b1221aa);
+            border: 1px solid #1f2937;
+            backdrop-filter: blur(6px);
+            box-shadow: var(--shadow);
+            border-radius: var(--radius);
+            padding: 16px;
+        }
+
+        .section-title {
+            font-size: 14px;
+            color: var(--muted);
+            margin: 4px 0 14px;
+            letter-spacing: .4px;
+            text-transform: uppercase;
+        }
+
+        .grid {
+            display: grid;
+            gap: 10px;
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .grid-3 {
+            grid-template-columns: 1fr 1fr 1fr;
+        }
+
+        .grid-1 {
+            grid-template-columns: 1fr;
+        }
+
+        label {
+            font-size: 12px;
+            color: var(--muted);
+            display: block;
+            margin: 6px 0 6px;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 12px 12px;
+            border-radius: 12px;
+            border: 1px solid #233044;
+            background: #0b1221;
+            color: var(--text);
+            outline: none;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: #334155;
+            box-shadow: 0 0 0 3px #33415550;
+        }
+
+        .btns {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        button {
+            padding: 10px 14px;
+            border-radius: 14px;
+            border: 1px solid transparent;
+            background: #0b1221;
+            color: var(--text);
+            cursor: pointer;
+            transition: .15s ease;
+            font-weight: 600;
+        }
+
+        .primary {
+            background: linear-gradient(180deg, #22c55e, #16a34a);
+            color: #07110a;
+        }
+
+        .primary:hover {
+            filter: brightness(1.05)
+        }
+
+        .ghost {
+            border-color: #1f2937
+        }
+
+        .ghost:hover {
+            border-color: #334155;
+            transform: translateY(-1px)
+        }
+
+        .danger {
+            background: linear-gradient(180deg, #ef4444, #dc2626);
+            color: #fff;
+        }
+
+        .warn {
+            background: linear-gradient(180deg, #f59e0b, #d97706);
+            color: #211a05;
+        }
+
+        .accent {
+            background: linear-gradient(180deg, #3b82f6, #2563eb);
+        }
+
+        .muted {
+            color: var(--muted)
+        }
+
+        .toolbar {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 10px;
+        }
+
+        .stat {
+            background: linear-gradient(180deg, #0b1221, #0b1221c0);
+            border: 1px solid #1f2937;
+            padding: 12px;
+            border-radius: 14px;
+            text-align: center;
+        }
+
+        .stat .num {
+            font-size: 20px;
+            font-weight: 800;
+            margin-top: 4px
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead th {
+            text-align: left;
+            font-size: 12px;
+            color: var(--muted);
+            font-weight: 700;
+            border-bottom: 1px solid #1f2937;
+            padding: 10px 8px;
+        }
+
+        tbody td {
+            border-bottom: 1px dashed #1f2937;
+            padding: 10px 8px;
+            vertical-align: middle;
+        }
+
+        .actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .right {
+            text-align: right
+        }
+
+        .pill {
+            font-size: 11px;
+            font-weight: 700;
+            padding: 6px 10px;
+            border-radius: 999px;
+            display: inline-block;
+            border: 1px solid #1f2937;
+        }
+
+        .ok {
+            background: #052e1b;
+            color: #8af0b9;
+        }
+
+        .bad {
+            background: #3a0b10;
+            color: #ffb4b4;
+        }
+
+        footer {
+            text-align: center;
+            color: var(--muted);
+            font-size: 12px;
+            padding: 16px
+        }
+
+        .hint {
+            font-size: 12px;
+            color: var(--muted);
+            margin-top: 6px
+        }
+
+        .hidden {
+            display: none !important
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div>
+            <div class="brand">Library Management System</div>
+            <div class="sub">Cloud Booking Software Solutions, Pune — HTML • CSS • JavaScript (LocalStorage)</div>
+        </div>
+        <div class="stats" style="min-width:280px; flex:0 0 280px;">
+            <div class="stat">
+                <div class="label">Total Books</div>
+                <div id="stat-total" class="num">0</div>
+            </div>
+            <div class="stat">
+                <div class="label">Available</div>
+                <div id="stat-available" class="num">0</div>
+            </div>
+            <div class="stat">
+                <div class="label">Issued</div>
+                <div id="stat-issued" class="num">0</div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- Left: Form -->
+        <section class="card">
+            <div class="section-title">Book Details</div>
+            <form id="book-form">
+                <div class="grid">
+                    <div>
+                        <label for="bookId">Book ID</label>
+                        <input id="bookId" placeholder="e.g., BK-1001" required />
+                    </div>
+                    <div>
+                        <label for="title">Title</label>
+                        <input id="title" placeholder="e.g., Introduction to Algorithms" required />
+                    </div>
+                </div>
+                <div class="grid">
+                    <div>
+                        <label for="author">Author</label>
+                        <input id="author" placeholder="e.g., Cormen" required />
+                    </div>
+                    <div>
+                        <label for="category">Category</label>
+                        <input id="category" placeholder="e.g., Computer Science" />
+                    </div>
+                </div>
+                <div class="grid">
+                    <div>
+                        <label for="total">Total Copies</label>
+                        <input id="total" type="number" min="1" value="1" required />
+                    </div>
+                    <div>
+                        <label for="available">Available Copies</label>
+                        <input id="available" type="number" min="0" value="1" required />
+                    </div>
+                </div>
+                <div class="btns">
+                    <button type="submit" class="primary" id="saveBtn">Save Book</button>
+                    <button type="button" class="accent hidden" id="updateBtn">Update Book</button>
+                    <button type="button" class="ghost" id="resetBtn">Reset</button>
+                    <button type="button" class="warn" id="exportBtn">Export JSON</button>
+                    <label for="importFile" class="ghost" style="cursor:pointer;">Import JSON</label>
+                    <input type="file" id="importFile" accept="application/json" class="hidden" />
+                </div>
+                <div class="hint">Tip: Book ID must be unique. During edit, Book ID is locked.</div>
+            </form>
+        </section>
+
+        <!-- Right: Table -->
+        <section class="card">
+            <div class="toolbar">
+                <div class="section-title" style="margin:0">Inventory</div>
+                <div style="display:flex; gap:10px; align-items:center;">
+                    <input id="search" placeholder="Search by title, author, ID..." style="min-width:260px" />
+                    <button type="button" id="clearAll" class="danger">Clear All</button>
+                </div>
+            </div>
+            <div style="overflow:auto">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Title</th>
+                            <th>Author</th>
+                            <th>Category</th>
+                            <th class="right">Total</th>
+                            <th class="right">Avail</th>
+                            <th>Status</th>
+                            <th class="right">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody"></tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <footer>Data is stored locally in your browser (LocalStorage). Clear All will remove it permanently.</footer>
+
+    <script>
+        // ====== Storage Helpers ======
+        const KEY = "lms_books_v1";
+        const byId = id => document.getElementById(id);
+
+        function loadBooks() {
+            try {
+                const raw = localStorage.getItem(KEY);
+                const arr = raw ? JSON.parse(raw) : [];
+                return Array.isArray(arr) ? arr : [];
+            } catch (e) {
+                console.warn("Failed to parse storage", e);
+                return [];
+            }
+        }
+        function saveBooks(list) {
+            localStorage.setItem(KEY, JSON.stringify(list));
+        }
+
+        // ====== State ======
+        let books = loadBooks();
+        let editingId = null;
+
+        // ====== Rendering ======
+        function renderTable(filter = "") {
+            const tb = byId("tbody");
+            tb.innerHTML = "";
+            const q = filter.trim().toLowerCase();
+
+            books.forEach(b => {
+                const matches = !q || [b.id, b.title, b.author, b.category].some(x => (x || "").toLowerCase().includes(q));
+                if (!matches) return;
+
+                const tr = document.createElement("tr");
+
+                const statusGood = b.available > 0;
+                const status = statusGood ? '<span class="pill ok">Available</span>' : '<span class="pill bad">Out</span>';
+                tr.innerHTML = `
+          <td>${escapeHTML(b.id)}</td>
+          <td>${escapeHTML(b.title)}</td>
+          <td>${escapeHTML(b.author || "")}</td>
+          <td>${escapeHTML(b.category || "")}</td>
+          <td class="right">${b.total}</td>
+          <td class="right">${b.available}</td>
+          <td>${status}</td>
+          <td class="right">
+            <div class="actions">
+              <button class="ghost" data-act="issue" data-id="${b.id}">Issue</button>
+              <button class="ghost" data-act="return" data-id="${b.id}">Return</button>
+              <button class="accent" data-act="edit" data-id="${b.id}">Edit</button>
+              <button class="danger" data-act="delete" data-id="${b.id}">Delete</button>
+            </div>
+          </td>
+        `;
+                tb.appendChild(tr);
+            });
+            updateStats();
+        }
+
+        function updateStats() {
+            const totalBooks = books.reduce((acc, b) => acc + (b.total || 0), 0);
+            const avail = books.reduce((acc, b) => acc + (b.available || 0), 0);
+            const issued = totalBooks - avail;
+            byId("stat-total").textContent = totalBooks;
+            byId("stat-available").textContent = avail;
+            byId("stat-issued").textContent = issued;
+        }
+
+        // ====== Utils ======
+        function escapeHTML(s) {
+            return (s ?? "").toString().replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]));
+        }
+        function formData() {
+            return {
+                id: byId("bookId").value.trim(),
+                title: byId("title").value.trim(),
+                author: byId("author").value.trim(),
+                category: byId("category").value.trim(),
+                total: Math.max(1, parseInt(byId("total").value || "1", 10)),
+                available: Math.max(0, parseInt(byId("available").value || "0", 10))
+            };
+        }
+        function setForm(b) {
+            byId("bookId").value = b?.id || "";
+            byId("title").value = b?.title || "";
+            byId("author").value = b?.author || "";
+            byId("category").value = b?.category || "";
+            byId("total").value = b?.total ?? 1;
+            byId("available").value = b?.available ?? 1;
+        }
+        function resetForm() {
+            setForm({ id: "", title: "", author: "", category: "", total: 1, available: 1 });
+            editingId = null;
+            byId("bookId").disabled = false;
+            byId("saveBtn").classList.remove("hidden");
+            byId("updateBtn").classList.add("hidden");
+        }
+
+        function validate(b, isEdit = false) {
+            if (!b.id || !b.title || !b.author) return "Book ID, Title and Author are required.";
+            if (b.total < 1) return "Total copies must be at least 1.";
+            if (b.available < 0) return "Available copies cannot be negative.";
+            if (b.available > b.total) return "Available cannot exceed Total copies.";
+            const exists = books.some(x => x.id.toLowerCase() === b.id.toLowerCase());
+            if (exists && !isEdit) return "Book ID already exists.";
+            return null;
+        }
+
+        // ====== Actions ======
+        function addBook(b) {
+            books.push(b);
+            saveBooks(books);
+            renderTable(byId("search").value);
+        }
+        function updateBook(b) {
+            const i = books.findIndex(x => x.id === editingId);
+            if (i >= 0) {
+                books[i] = { ...b, id: editingId }; // keep original ID
+                saveBooks(books);
+                renderTable(byId("search").value);
+            }
+        }
+        function deleteBook(id) {
+            books = books.filter(b => b.id !== id);
+            saveBooks(books);
+            renderTable(byId("search").value);
+        }
+        function issueBook(id) {
+            const b = books.find(x => x.id === id);
+            if (!b) return;
+            if (b.available <= 0) {
+                alert("No available copies to issue.");
+                return;
+            }
+            b.available -= 1;
+            saveBooks(books);
+            renderTable(byId("search").value);
+        }
+        function returnBook(id) {
+            const b = books.find(x => x.id === id);
+            if (!b) return;
+            if (b.available >= b.total) {
+                alert("All copies are already returned.");
+                return;
+            }
+            b.available += 1;
+            saveBooks(books);
+            renderTable(byId("search").value);
+        }
+        function beginEdit(id) {
+            const b = books.find(x => x.id === id);
+            if (!b) return;
+            editingId = b.id;
+            setForm(b);
+            byId("bookId").disabled = true;
+            byId("saveBtn").classList.add("hidden");
+            byId("updateBtn").classList.remove("hidden");
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+
+        // ====== Events ======
+        byId("book-form").addEventListener("submit", (e) => {
+            e.preventDefault();
+            const b = formData();
+            const err = validate(b, !!editingId);
+            if (err) { alert(err); return; }
+            if (editingId) { updateBook(b); resetForm(); }
+            else { addBook(b); resetForm(); }
+        });
+
+        byId("updateBtn").addEventListener("click", () => {
+            const b = formData();
+            const err = validate(b, !!editingId);
+            if (err) { alert(err); return; }
+            updateBook(b);
+            resetForm();
+        });
+
+        byId("resetBtn").addEventListener("click", resetForm);
+
+        byId("tbody").addEventListener("click", (e) => {
+            const btn = e.target.closest("button[data-act]");
+            if (!btn) return;
+            const id = btn.getAttribute("data-id");
+            const act = btn.getAttribute("data-act");
+            if (act === "delete") {
+                if (confirm("Delete this book?")) deleteBook(id);
+            } else if (act === "edit") {
+                beginEdit(id);
+            } else if (act === "issue") {
+                issueBook(id);
+            } else if (act === "return") {
+                returnBook(id);
+            }
+        });
+
+        byId("search").addEventListener("input", (e) => {
+            renderTable(e.target.value);
+        });
+
+        byId("clearAll").addEventListener("click", () => {
+            if (confirm("This will permanently remove all stored books. Continue?")) {
+                books = [];
+                saveBooks(books);
+                renderTable(byId("search").value);
+                resetForm();
+            }
+        });
+
+        // Export / Import
+        byId("exportBtn").addEventListener("click", () => {
+            const blob = new Blob([JSON.stringify(books, null, 2)], { type: "application/json" });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "lms-data.json";
+            a.click();
+            URL.revokeObjectURL(url);
+        });
+
+        byId("importFile").addEventListener("change", async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            try {
+                const text = await file.text();
+                const data = JSON.parse(text);
+                if (!Array.isArray(data)) throw new Error("Invalid file.");
+                // basic shape check
+                books = data.map(x => ({
+                    id: String(x.id ?? "").trim(),
+                    title: String(x.title ?? "").trim(),
+                    author: String(x.author ?? "").trim(),
+                    category: String(x.category ?? "").trim(),
+                    total: Math.max(1, parseInt(x.total ?? 1, 10)),
+                    available: Math.max(0, parseInt(x.available ?? 0, 10)),
+                })).filter(x => x.id && x.title && x.author);
+                saveBooks(books);
+                renderTable(byId("search").value);
+                alert("Import successful.");
+            } catch (err) {
+                alert("Failed to import file.");
+            } finally {
+                e.target.value = "";
+            }
+        });
+
+        // ====== Init ======
+        renderTable();
+    </script>
+</body>
+
+</html>
